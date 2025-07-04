@@ -5,8 +5,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import simsimbooks.couponserver.common.dto.ApiResponse;
-import simsimbooks.couponserver.domain.category.dto.CategoryRequest;
+import simsimbooks.couponserver.domain.category.dto.CategoryCreateRequest;
 import simsimbooks.couponserver.domain.category.dto.CategoryResponse;
+import simsimbooks.couponserver.domain.category.dto.CategoryUpdateRequest;
 import simsimbooks.couponserver.domain.category.service.CategoryService;
 
 import java.util.Map;
@@ -18,7 +19,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Map<String,Long>>> createCategory(@RequestBody CategoryRequest requestDto) {
+    public ResponseEntity<ApiResponse<Map<String,Long>>> createCategory(@RequestBody CategoryCreateRequest requestDto) {
         Long id = categoryService.createCategory(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(Map.of("id", id), "카테고리가 생성되었습니다."));
     }
@@ -31,7 +32,7 @@ public class CategoryController {
 
     @PatchMapping("/{categoryId}")
     public ResponseEntity<ApiResponse<CategoryResponse>> updateCategory(@PathVariable Long categoryId,
-                                                              @RequestBody CategoryRequest requestDto) {
+                                                                        @RequestBody CategoryUpdateRequest requestDto) {
         CategoryResponse response = categoryService.updateCategory(categoryId, requestDto);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response, "카테고리 정보를 업데이트했습니다."));
     }

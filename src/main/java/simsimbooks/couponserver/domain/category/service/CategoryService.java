@@ -4,8 +4,9 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import simsimbooks.couponserver.common.util.DtoMapper;
-import simsimbooks.couponserver.domain.category.dto.CategoryRequest;
+import simsimbooks.couponserver.domain.category.dto.CategoryCreateRequest;
 import simsimbooks.couponserver.domain.category.dto.CategoryResponse;
+import simsimbooks.couponserver.domain.category.dto.CategoryUpdateRequest;
 import simsimbooks.couponserver.domain.category.entity.Category;
 import simsimbooks.couponserver.domain.category.exception.CategoryNotFoundException;
 import simsimbooks.couponserver.domain.category.repository.CategoryRepository;
@@ -22,7 +23,7 @@ public class CategoryService {
      * CREATE
      */
     @Transactional
-    public Long createCategory(CategoryRequest requestDto) {
+    public Long createCategory(CategoryCreateRequest requestDto) {
         Category parent = null;
 
         // 부모 카테고리를 조회 후 있으면 참조하도록, 없으면 null
@@ -46,7 +47,7 @@ public class CategoryService {
     }
 
     @Transactional
-    public CategoryResponse updateCategory(Long categoryId, CategoryRequest requestDto) {
+    public CategoryResponse updateCategory(Long categoryId, CategoryUpdateRequest requestDto) {
         Category category = categoryRepository.findById(categoryId).orElseThrow(CategoryNotFoundException::new);
         
         if (Objects.nonNull(requestDto.getParentId())) {
