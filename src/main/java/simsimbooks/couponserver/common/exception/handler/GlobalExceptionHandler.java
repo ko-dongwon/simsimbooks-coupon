@@ -1,4 +1,4 @@
-package simsimbooks.couponserver.common.exception;
+package simsimbooks.couponserver.common.exception.handler;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.MessageSource;
@@ -9,6 +9,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import simsimbooks.couponserver.common.dto.ApiResponse;
+import simsimbooks.couponserver.common.exception.BusinessException;
 
 import java.util.*;
 
