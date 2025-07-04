@@ -45,7 +45,7 @@ public class Category {
     }
 
     public void changeParent(Category parent) {
-        if(this.parent.equals(parent)) return;
+        if(this.parent != null && this.parent.equals(parent)) return;
         this.parent = parent;
         parent.getChildren().add(this);
     }
