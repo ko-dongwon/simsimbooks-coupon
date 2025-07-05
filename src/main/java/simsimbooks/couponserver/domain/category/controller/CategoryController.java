@@ -1,5 +1,6 @@
 package simsimbooks.couponserver.domain.category.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -19,7 +20,7 @@ public class CategoryController {
     private final CategoryService categoryService;
 
     @PostMapping
-    public ResponseEntity<ApiResponse<Map<String,Long>>> createCategory(@RequestBody CategoryCreateRequest requestDto) {
+    public ResponseEntity<ApiResponse<Map<String,Long>>> createCategory(@Valid @RequestBody CategoryCreateRequest requestDto) {
         Long id = categoryService.createCategory(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(Map.of("id", id), "카테고리가 생성되었습니다."));
     }

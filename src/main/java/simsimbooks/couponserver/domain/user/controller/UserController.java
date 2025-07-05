@@ -1,5 +1,6 @@
 package simsimbooks.couponserver.domain.user.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -17,7 +18,7 @@ public class UserController {
     private final UserService userService;
 
     @PostMapping // Create
-    public ResponseEntity<ApiResponse<UserResponse>> createUser(@RequestBody UserCreateRequest requestDto) {
+    public ResponseEntity<ApiResponse<UserResponse>> createUser(@Valid @RequestBody UserCreateRequest requestDto) {
         UserResponse response = userService.createUser(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(response,"회원이 생성되었습니다."));
     }

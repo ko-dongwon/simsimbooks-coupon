@@ -1,5 +1,6 @@
 package simsimbooks.couponserver.domain.book.controller;
 
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -21,7 +22,7 @@ public class BookController {
     private final BookService bookService;
 
     @PostMapping // Create
-    public ResponseEntity<ApiResponse<BookResponse>> createBook(@RequestBody BookCreateRequest requestDto) {
+    public ResponseEntity<ApiResponse<BookResponse>> createBook(@Valid @RequestBody BookCreateRequest requestDto) {
         BookResponse response = bookService.createBook(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(response, "책이 생성되었습니다."));
     }
