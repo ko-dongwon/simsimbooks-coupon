@@ -17,23 +17,22 @@ import simsimbooks.couponserver.domain.coupons.coupontype.service.CouponTypeServ
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/coupon-types")
 public class CouponTypeController {
     private final CouponTypeService couponTypeService;
 
-    @PostMapping
+    @PostMapping("/coupon-types")
     public ResponseEntity<ApiResponse<CouponTypeResponse>> createCouponType(@Valid @RequestBody CouponTypeCreateRequest requestDto) {
         CouponTypeResponse response = couponTypeService.createCouponType(requestDto);
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(response, "쿠폰 타입이 생성되었습니다."));
     }
 
-    @GetMapping("/{couponTypeId}")
+    @GetMapping("/coupon-types/{couponTypeId}")
     public ResponseEntity<ApiResponse<CouponTypeResponse>> getCouponType(@PathVariable Long couponTypeId) {
         CouponTypeResponse response = couponTypeService.getCouponType(couponTypeId);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response, "쿠폰 타입 정보를 조회했습니다."));
     }
 
-    @GetMapping
+    @GetMapping("/coupon-types")
     public ResponseEntity<ApiResponse<Page<CouponTypeResponse>>> getCouponTypes(@PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<CouponTypeResponse> page = couponTypeService.getCouponTypes(pageable);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(page, "쿠폰 타입 정보를 조회했습니다."));
@@ -41,10 +40,9 @@ public class CouponTypeController {
 
     /**
      * 쿠폰 정책 별 쿠폰 타입 페이징
-     * 같은 URL을 사용하면서도, 다른 한 URL은 쿼리스트링으로 값을 받아오고 싶을 때 params을 씀
      */
-    @GetMapping(params = "couponPolicyId")
-    public ResponseEntity<ApiResponse<Page<CouponTypeResponse>>> getCouponTypesByCouponPolicy(@RequestParam Long couponPolicyId,
+    @GetMapping("/coupon-policies/{couponPolicyId}/coupon-types")
+    public ResponseEntity<ApiResponse<Page<CouponTypeResponse>>> getCouponTypesByCouponPolicy(@PathVariable Long couponPolicyId,
                                                                                               @PageableDefault(sort = "createdAt", direction = Sort.Direction.DESC) Pageable pageable) {
         Page<CouponTypeResponse> page = couponTypeService.getCouponTypesByCouponPolicy(couponPolicyId, pageable);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(page, "쿠폰 정책 별 쿠폰 타입 정보를 조회했습니다."));
@@ -53,13 +51,13 @@ public class CouponTypeController {
     /**
      * 쿠폰 타입으로 발급된 쿠폰이 존재하면 삭제 불가능
      */
-    @DeleteMapping("/{couponTypeId}")
+    @DeleteMapping("/coupon-types/{couponTypeId}")
     public ResponseEntity<ApiResponse<Void>> deleteCouponType(@PathVariable Long couponTypeId) {
         couponTypeService.deleteCouponType(couponTypeId);
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.success(null, "쿠폰 타입 정보를 삭제했습니다."));
     }
 
-    @PutMapping("/{couponTypeId}")
+    @PutMapping("/coupon-types/{couponTypeId}")
     public ResponseEntity<ApiResponse<CouponTypeResponse>> updateCouponType(@PathVariable Long couponTypeId,
                                                                             @RequestBody CouponTypeUpdateRequest requestDto) {
         CouponTypeResponse response = couponTypeService.updateCouponType(couponTypeId, requestDto);

@@ -6,9 +6,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import simsimbooks.couponserver.domain.coupons.coupon.CouponStatus;
 import simsimbooks.couponserver.domain.coupons.coupontype.entity.CouponType;
+import simsimbooks.couponserver.domain.coupons.coupontype.enums.CouponTargetType;
 import simsimbooks.couponserver.domain.user.entity.User;
 
 import java.time.LocalDateTime;
+import java.util.Objects;
 
 @Entity
 @Table(name = "coupons")
@@ -53,5 +55,18 @@ public class Coupon {
         LocalDateTime deadline = couponDeadline.isBefore(periodDeadline) ? couponDeadline : periodDeadline;
 
         return new Coupon(user, couponType, deadline);
+    }
+
+    public void use() {
+        this.status = CouponStatus.USED;
+        this.usedAt = LocalDateTime.now();
+    }
+
+    public void expire() {
+        this.status = CouponStatus.EXPIRED;
+    }
+
+    public boolean isApplicable(CouponTargetType targetType, Long targetId) {
+        return targetType == couponType.getTargetType() || Objects.equals(couponType.getTargetId(), targetId);
     }
 }
