@@ -48,7 +48,7 @@ public class CouponType extends BaseTimeEntity {
         this.targetId = targetId;
     }
 
-    public static CouponType of(String name, Integer period, LocalDateTime deadline, CouponPolicy couponPolicy, CouponTargetType targetType, Long targetId) {
+    public static CouponType of(String name, Integer period,@Nullable LocalDateTime deadline, CouponPolicy couponPolicy, CouponTargetType targetType, Long targetId) {
         if(deadline == null) deadline = LocalDateTime.of(2999, 1, 1, 0, 0);
         return new CouponType(name, period, deadline, couponPolicy, targetType, targetId);
     }
