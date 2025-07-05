@@ -24,7 +24,7 @@ public class UserService {
         // 이메일 중복 확인
         userRepository.findByEmail(requestDto.getEmail()).orElseThrow(() -> new BusinessException(ErrorCode.EMAIL_ALREADY_EXISTS));
 
-        User save = userRepository.save(User.of(requestDto.getName(), requestDto.getEmail()));
+        User save = userRepository.save(User.of(requestDto.getName(), requestDto.getEmail(),requestDto.getBirth()));
         return DtoMapper.toDto(save, UserResponse.class);
     }
 

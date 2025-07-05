@@ -6,6 +6,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+import java.time.LocalDate;
 import java.util.Optional;
 
 @Entity
@@ -22,13 +23,16 @@ public class User {
 
     private String email;
 
-    private User(String name, String email) {
+    private LocalDate birth;
+
+    private User(String name, String email,LocalDate birth) {
         this.name = name;
         this.email = email;
+        this.birth = birth;
     }
 
-    public static User of(String name, String email) {
-        return new User(name, email);
+    public static User of(String name, String email, LocalDate birth) {
+        return new User(name, email,birth);
     }
 
     // update method
