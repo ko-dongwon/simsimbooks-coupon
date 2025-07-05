@@ -16,6 +16,7 @@ import simsimbooks.couponserver.domain.book.service.BookService;
 
 @RestController
 @RequiredArgsConstructor
+@RequestMapping("/books")
 public class BookController {
     private final BookService bookService;
 
