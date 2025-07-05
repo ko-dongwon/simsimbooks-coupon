@@ -29,6 +29,7 @@ public class Category {
     private Category(String name, Category parent) {
         this.name = name;
         this.parent = parent;
+        parent.getChildren().add(this);
     }
 
     //정적 팩토리 메서드

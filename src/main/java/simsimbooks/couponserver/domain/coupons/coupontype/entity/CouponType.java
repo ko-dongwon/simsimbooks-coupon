@@ -61,7 +61,7 @@ public class CouponType extends BaseTimeEntity {
         Optional.ofNullable(period).ifPresent(p -> this.period = p);
     }
 
-    public void updateDeadLine(@Nullable LocalDateTime deadline) {
+    public void updateDeadline(@Nullable LocalDateTime deadline) {
         Optional.ofNullable(deadline).ifPresent(d -> this.deadline = d);
     }
     
