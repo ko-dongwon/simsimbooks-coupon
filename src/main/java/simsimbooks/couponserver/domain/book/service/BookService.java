@@ -38,7 +38,7 @@ public class BookService {
     }
 
     public Page<BookResponse> getBooks(Pageable pageable) {
-        Page<Book> page = bookRepository.findBooks(pageable);
+        Page<Book> page = bookRepository.findAll(pageable);
         return page.map(e -> DtoMapper.toDto(e, BookResponse.class));
     }
 
