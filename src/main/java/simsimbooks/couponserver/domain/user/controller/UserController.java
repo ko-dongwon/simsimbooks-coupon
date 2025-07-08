@@ -16,7 +16,6 @@ import simsimbooks.couponserver.domain.user.service.UserService;
 @RequiredArgsConstructor
 public class UserController {
     private final UserService userService;
-
     @PostMapping // Create
     public ResponseEntity<ApiResponse<UserResponse>> createUser(@Valid @RequestBody UserCreateRequest requestDto) {
         UserResponse response = userService.createUser(requestDto);

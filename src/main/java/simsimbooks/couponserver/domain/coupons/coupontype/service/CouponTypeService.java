@@ -34,6 +34,7 @@ public class CouponTypeService {
                 requestDto.getPeriod(),
                 requestDto.getDeadline(),
                 couponPolicy,
+                requestDto.getRemainIssueCnt(),
                 requestDto.getTargetType(),
                 requestDto.getTargetId()
         );
@@ -47,6 +48,7 @@ public class CouponTypeService {
         couponType.updateName(requestDto.getName());
         couponType.updatePeriod(requestDto.getPeriod());
         couponType.updateDeadline(requestDto.getDeadline());
+        couponType.updateRemainIssueCnt(requestDto.getRemainIssueCnt());
         return DtoMapper.toDto(couponType, CouponTypeResponse.class);
     }
 

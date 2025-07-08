@@ -17,12 +17,12 @@ import simsimbooks.couponserver.domain.user.repository.UserRepository;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class UserService {
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
 
     @Transactional
     public UserResponse createUser(UserCreateRequest requestDto) {
         // 이메일 중복 확인
-        userRepository.findByEmail(requestDto.getEmail()).orElseThrow(() -> new BusinessException(ErrorCode.EMAIL_ALREADY_EXISTS));
+        if(userRepository.existsByEmail(requestDto.getEmail())) throw new BusinessException(ErrorCode.EMAIL_ALREADY_EXISTS);
 
         User save = userRepository.save(User.of(requestDto.getName(), requestDto.getEmail(),requestDto.getBirth()));
         return DtoMapper.toDto(save, UserResponse.class);

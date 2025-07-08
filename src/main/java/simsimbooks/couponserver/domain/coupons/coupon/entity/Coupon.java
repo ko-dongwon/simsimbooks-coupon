@@ -35,9 +35,11 @@ public class Coupon {
     private CouponStatus status;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "coupon_type_id")
     private CouponType couponType;
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id")
     private User user;
 
     private Coupon(User user, CouponType couponType,LocalDateTime deadline) {

@@ -21,12 +21,11 @@ import static simsimbooks.couponserver.domain.coupons.couponpolicy.entity.QCoupo
 import static simsimbooks.couponserver.domain.coupons.coupontype.entity.QCouponType.couponType;
 
 public class CouponRepositoryCustomImpl implements CouponRepositoryCustom {
-    @PersistenceContext
-    private EntityManager em;
-
+    private final EntityManager em;
     private final JPAQueryFactory queryFactory;
 
-    public CouponRepositoryCustomImpl() {
+    public CouponRepositoryCustomImpl(EntityManager em) {
+        this.em = em;
         this.queryFactory = new JPAQueryFactory(em);
     }
 

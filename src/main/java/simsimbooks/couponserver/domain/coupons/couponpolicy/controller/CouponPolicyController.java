@@ -32,12 +32,14 @@ public class CouponPolicyController {
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(page, "쿠폰 정책 정보를 조회했습니다."));
     }
 
+    //TODO
     @GetMapping("/{couponPolicyId}")
     public ResponseEntity<ApiResponse<CouponPolicyResponse>> getCouponPolicy(@PathVariable Long couponPolicyId) {
         CouponPolicyResponse response = couponPolicyService.getCouponPolicy(couponPolicyId);
         return ResponseEntity.status(HttpStatus.OK).body(ApiResponse.success(response, "쿠폰 정책 정보를 조회했습니다."));
     }
 
+    //TODO
     @DeleteMapping("/{couponPolicyId}")
     public ResponseEntity<ApiResponse<Void>> deleteCouponPolicy(@PathVariable Long couponPolicyId) {
         couponPolicyService.deleteCouponPolicy(couponPolicyId);

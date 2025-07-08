@@ -57,7 +57,7 @@ public class CouponTypeController {
         return ResponseEntity.status(HttpStatus.NO_CONTENT).body(ApiResponse.success(null, "쿠폰 타입 정보를 삭제했습니다."));
     }
 
-    @PutMapping("/coupon-types/{couponTypeId}")
+    @PatchMapping("/coupon-types/{couponTypeId}")
     public ResponseEntity<ApiResponse<CouponTypeResponse>> updateCouponType(@PathVariable Long couponTypeId,
                                                                             @RequestBody CouponTypeUpdateRequest requestDto) {
         CouponTypeResponse response = couponTypeService.updateCouponType(couponTypeId, requestDto);

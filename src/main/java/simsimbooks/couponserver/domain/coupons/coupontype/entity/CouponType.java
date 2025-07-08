@@ -28,6 +28,8 @@ public class CouponType extends BaseTimeEntity {
 
     private LocalDateTime deadline;
 
+    private Integer remainIssueCnt;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "coupon_policy_id")
     private CouponPolicy couponPolicy;
@@ -39,18 +41,28 @@ public class CouponType extends BaseTimeEntity {
     @Column(name = "target_id")
     private Long targetId;
 
-    private CouponType(String name, Integer period, LocalDateTime deadline, CouponPolicy couponPolicy, CouponTargetType targetType, Long targetId) {
+    private CouponType(String name, Integer period, LocalDateTime deadline, CouponPolicy couponPolicy, Integer remainIssueCnt, CouponTargetType targetType, Long targetId) {
         this.name = name;
         this.period = period;
         this.deadline = deadline;
         this.couponPolicy = couponPolicy;
         this.targetType = targetType;
         this.targetId = targetId;
+        this.remainIssueCnt = remainIssueCnt;
     }
 
-    public static CouponType of(String name, Integer period,@Nullable LocalDateTime deadline, CouponPolicy couponPolicy, CouponTargetType targetType, Long targetId) {
+    public static CouponType of(String name, Integer period,@Nullable LocalDateTime deadline, CouponPolicy couponPolicy,Integer remainIssueCnt, CouponTargetType targetType, Long targetId) {
         if(deadline == null) deadline = LocalDateTime.of(2999, 1, 1, 0, 0);
-        return new CouponType(name, period, deadline, couponPolicy, targetType, targetId);
+        if(targetType == CouponTargetType.ALL) targetId = 0L;
+        return new CouponType(name, period, deadline, couponPolicy, remainIssueCnt, targetType, targetId);
+    }
+
+    public boolean canIssue() {
+        return remainIssueCnt > 0;
+    }
+
+    public void issue() {
+        remainIssueCnt--;
     }
 
     public void updateName(@Nullable String name) {
@@ -63,6 +75,10 @@ public class CouponType extends BaseTimeEntity {
 
     public void updateDeadline(@Nullable LocalDateTime deadline) {
         Optional.ofNullable(deadline).ifPresent(d -> this.deadline = d);
+    }
+
+    public void updateRemainIssueCnt(@Nullable Integer remainIssueCnt) {
+        Optional.ofNullable(remainIssueCnt).ifPresent(c -> this.remainIssueCnt = c);
     }
     
     

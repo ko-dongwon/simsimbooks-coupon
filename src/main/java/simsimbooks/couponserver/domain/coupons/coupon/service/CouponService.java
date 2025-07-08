@@ -12,10 +12,7 @@ import simsimbooks.couponserver.domain.coupons.coupon.dto.CouponResponse;
 import simsimbooks.couponserver.domain.coupons.coupon.dto.CouponSearchCondition;
 import simsimbooks.couponserver.domain.coupons.coupon.dto.IssueCouponRequest;
 import simsimbooks.couponserver.domain.coupons.coupon.entity.Coupon;
-import simsimbooks.couponserver.domain.coupons.coupon.exception.CouponAlreadyExpiredException;
-import simsimbooks.couponserver.domain.coupons.coupon.exception.CouponAlreadyUsedException;
-import simsimbooks.couponserver.domain.coupons.coupon.exception.CouponCannotApplyException;
-import simsimbooks.couponserver.domain.coupons.coupon.exception.CouponNotFoundException;
+import simsimbooks.couponserver.domain.coupons.coupon.exception.*;
 import simsimbooks.couponserver.domain.coupons.coupon.repository.CouponRepository;
 import simsimbooks.couponserver.domain.coupons.coupon.util.CouponMapper;
 import simsimbooks.couponserver.domain.coupons.coupontype.entity.CouponType;
@@ -50,12 +47,17 @@ public class CouponService {
     @Transactional
     public CouponResponse issueCoupon(IssueCouponRequest requestDto) {
         CouponType couponType = couponTypeRepository.findById(requestDto.getCouponTypeId()).orElseThrow(CouponTypeNotFoundException::new);
+
+        if(!couponType.canIssue()) throw new CouponIssueLimitReachedException();
+
         User user = userRepository.findById(requestDto.getUserId()).orElseThrow(UserNotFoundException::new);
 
         // 유저가 이미 미사용 쿠폰을 가지고 있으면 예외 발생
         if(couponRepository.existsUnusedCouponByUserId(user.getId())) throw new BusinessException(ErrorCode.USER_ALREADY_HAS_COUPON);
 
         Coupon save = couponRepository.save(Coupon.of(user, couponType));
+        couponType.issue();
+
         return CouponMapper.toResponse(save);
     }
 

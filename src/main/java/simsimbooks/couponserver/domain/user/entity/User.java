@@ -5,6 +5,7 @@ import jakarta.persistence.*;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.springframework.util.StringUtils;
 
 import java.time.LocalDate;
 import java.util.Optional;
@@ -37,6 +38,6 @@ public class User {
 
     // update method
     public void changeName(@Nullable String name) {
-        Optional.ofNullable(name).ifPresent(n -> this.name = n);
+        if(StringUtils.hasText(name)) this.name = name;
     }
 }

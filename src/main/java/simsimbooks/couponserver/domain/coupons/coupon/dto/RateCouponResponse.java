@@ -1,6 +1,7 @@
 package simsimbooks.couponserver.domain.coupons.coupon.dto;
 
 import lombok.Getter;
+import org.hibernate.Hibernate;
 import simsimbooks.couponserver.domain.coupons.coupon.entity.Coupon;
 import simsimbooks.couponserver.domain.coupons.couponpolicy.entity.RateCouponPolicy;
 import simsimbooks.couponserver.domain.coupons.couponpolicy.enums.DiscountType;
@@ -16,11 +17,9 @@ public class RateCouponResponse extends CouponResponse {
 
     public RateCouponResponse(Coupon coupon) {
         super(coupon, coupon.getCouponType(), coupon.getCouponType().getCouponPolicy());
-        if (coupon.getCouponType().getCouponPolicy() instanceof RateCouponPolicy ratePolicy) {
+        if (Hibernate.unproxy(coupon.getCouponType().getCouponPolicy()) instanceof RateCouponPolicy ratePolicy) {
             this.discountRate = ratePolicy.getDiscountRate();
             this.maxDiscountAmount = ratePolicy.getMaxDiscountAmount();
-        }
-        throw new InvalidCouponPolicyException();
-
+        } else throw new InvalidCouponPolicyException();
     }
 }
