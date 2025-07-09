@@ -6,6 +6,8 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import simsimbooks.couponserver.common.entity.BaseTimeEntity;
+import simsimbooks.couponserver.common.exception.BusinessException;
+import simsimbooks.couponserver.common.exception.ErrorCode;
 import simsimbooks.couponserver.domain.coupons.couponpolicy.entity.CouponPolicy;
 import simsimbooks.couponserver.domain.coupons.coupontype.enums.CouponTargetType;
 
@@ -57,12 +59,11 @@ public class CouponType extends BaseTimeEntity {
         return new CouponType(name, period, deadline, couponPolicy, remainIssueCnt, targetType, targetId);
     }
 
-    public boolean canIssue() {
-        return remainIssueCnt > 0;
-    }
 
     public void issue() {
+        if(remainIssueCnt <= 0 ) throw new BusinessException(ErrorCode.USER_ALREADY_HAS_COUPON);
         remainIssueCnt--;
+
     }
 
     public void updateName(@Nullable String name) {
