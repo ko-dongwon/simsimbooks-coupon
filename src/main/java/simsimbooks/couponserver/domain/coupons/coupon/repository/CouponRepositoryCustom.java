@@ -8,7 +8,7 @@ import simsimbooks.couponserver.domain.coupons.coupon.entity.Coupon;
 public interface CouponRepositoryCustom {
     Page<Coupon> searchByUserId(Long userId, CouponSearchCondition condition, Pageable pageable);
 
-    Boolean existsUnusedCouponByUserId(Long userId);
+    Boolean existsUnusedCouponByUserId(Long userId, Long couponType);
 
     void expireAllOverdueUnusedCoupon();
 

@@ -4,7 +4,6 @@ import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
@@ -58,12 +57,13 @@ public class CouponRepositoryCustomImpl implements CouponRepositoryCustom {
     }
 
     @Override
-    public Boolean existsUnusedCouponByUserId(Long userId) {
+    public Boolean existsUnusedCouponByUserId(Long userId, Long couponTypeId) {
         return queryFactory.selectFrom(coupon)
                 .where(
                         coupon.user.id.eq(userId),
+                        coupon.couponType.id.eq(couponTypeId),
                         statusEq(CouponStatus.UNUSED)
-                ).fetchOne() != null;
+                ).fetchFirst() != null;
     }
 
     @Override
