@@ -41,7 +41,7 @@ public class CouponController {
      */
     @PostMapping("/coupons/issue")
     public ResponseEntity<ApiResponse<CouponResponse>> issueCoupon(@Valid @RequestBody IssueCouponRequest requestDto) {
-        CouponResponse response = couponService.issueCoupon(requestDto);
+        CouponResponse response = couponService.issueCoupon(requestDto.getCouponTypeId(), requestDto.getUserId());
         return ResponseEntity.status(HttpStatus.CREATED).body(ApiResponse.success(response, "쿠폰이 발급되었습니다."));
     }
 }

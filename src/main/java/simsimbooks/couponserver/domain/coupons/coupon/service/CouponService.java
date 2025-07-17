@@ -45,9 +45,9 @@ public class CouponService {
     }
 
     @Transactional
-    public CouponResponse issueCoupon(IssueCouponRequest requestDto) {
-        CouponType couponType = couponTypeRepository.findById(requestDto.getCouponTypeId()).orElseThrow(CouponTypeNotFoundException::new);
-        User user = userRepository.findById(requestDto.getUserId()).orElseThrow(UserNotFoundException::new);
+    public CouponResponse issueCoupon(Long couponTypeId, Long userId) {
+        CouponType couponType = couponTypeRepository.findById(couponTypeId).orElseThrow(CouponTypeNotFoundException::new);
+        User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
 
         // 유저가 이미 미사용 쿠폰을 가지고 있으면 예외 발생
         if(couponRepository.existsUnusedCouponByUserId(user.getId(), couponType.getId())) throw new BusinessException(ErrorCode.USER_ALREADY_HAS_COUPON);
