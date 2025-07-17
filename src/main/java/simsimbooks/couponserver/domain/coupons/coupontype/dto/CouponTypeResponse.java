@@ -15,14 +15,14 @@ public class CouponTypeResponse {
     private CouponTargetType targetType;
     private Long targetId;
     private Long couponPolicyId;
-    private Integer remainIssueCnt;
+    private Integer maxIssueCnt;
 
     public CouponTypeResponse(CouponType couponType) {
         this.id = couponType.getId();
         this.name = couponType.getName();
         this.period = couponType.getPeriod();
         this.deadline = couponType.getDeadline();
-        this.remainIssueCnt = couponType.getRemainIssueCnt();
+        this.maxIssueCnt = couponType.getMaxIssueCnt();
         this.targetType = couponType.getTargetType();
         this.targetId = couponType.getTargetId();
         this.couponPolicyId = couponType.getCouponPolicy().getId();

@@ -27,5 +27,5 @@ public class CouponTypeCreateRequest {
     private Long couponPolicyId;
     @NotNull
     @Positive
-    private Integer remainIssueCnt;
+    private Integer maxIssueCnt;
 }

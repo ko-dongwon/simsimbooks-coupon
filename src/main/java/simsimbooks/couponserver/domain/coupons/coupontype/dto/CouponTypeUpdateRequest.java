@@ -11,5 +11,5 @@ public class CouponTypeUpdateRequest {
     private String name;
     private Integer period;
     private LocalDateTime deadline;
-    private Integer remainIssueCnt;
+    private Integer maxIssueCnt;
 }

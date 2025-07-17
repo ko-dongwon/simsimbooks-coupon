@@ -29,7 +29,9 @@ public class CouponType extends BaseTimeEntity {
 
     private LocalDateTime deadline;
 
-    private Integer remainIssueCnt;
+    private Integer currentIssueCnt;
+
+    private Integer maxIssueCnt;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "coupon_policy_id")
@@ -42,26 +44,27 @@ public class CouponType extends BaseTimeEntity {
     @Column(name = "target_id")
     private Long targetId;
 
-    private CouponType(String name, Integer period, LocalDateTime deadline, CouponPolicy couponPolicy, Integer remainIssueCnt, CouponTargetType targetType, Long targetId) {
+    private CouponType(String name, Integer period, LocalDateTime deadline, CouponPolicy couponPolicy, Integer maxIssueCnt, CouponTargetType targetType, Long targetId) {
         this.name = name;
         this.period = period;
         this.deadline = deadline;
         this.couponPolicy = couponPolicy;
         this.targetType = targetType;
         this.targetId = targetId;
-        this.remainIssueCnt = remainIssueCnt;
+        this.maxIssueCnt = maxIssueCnt;
+        this. currentIssueCnt = 0;
     }
 
-    public static CouponType of(String name, Integer period,@Nullable LocalDateTime deadline, CouponPolicy couponPolicy,Integer remainIssueCnt, CouponTargetType targetType, Long targetId) {
+    public static CouponType of(String name, Integer period,@Nullable LocalDateTime deadline, CouponPolicy couponPolicy,Integer maxIssueCnt, CouponTargetType targetType, Long targetId) {
         if(deadline == null) deadline = LocalDateTime.of(2999, 1, 1, 0, 0);
         if(targetType == CouponTargetType.ALL) targetId = 0L;
-        return new CouponType(name, period, deadline, couponPolicy, remainIssueCnt, targetType, targetId);
+        return new CouponType(name, period, deadline, couponPolicy, maxIssueCnt, targetType, targetId);
     }
 
 
     public void issue() {
-        if(remainIssueCnt <= 0 ) throw new CouponIssueLimitReachedException();
-        remainIssueCnt--;
+        if(currentIssueCnt >= maxIssueCnt) throw new CouponIssueLimitReachedException();
+        currentIssueCnt++;
 
     }
 
@@ -77,8 +80,8 @@ public class CouponType extends BaseTimeEntity {
         Optional.ofNullable(deadline).ifPresent(d -> this.deadline = d);
     }
 
-    public void updateRemainIssueCnt(@Nullable Integer remainIssueCnt) {
-        Optional.ofNullable(remainIssueCnt).ifPresent(c -> this.remainIssueCnt = c);
+    public void updateMaxIssueCnt(@Nullable Integer maxIssueCnt) {
+        Optional.ofNullable(maxIssueCnt).ifPresent(c -> this.maxIssueCnt = c);
     }
     
     
