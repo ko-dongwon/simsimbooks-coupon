@@ -44,6 +44,9 @@ public class CouponType extends BaseTimeEntity {
     @Column(name = "target_id")
     private Long targetId;
 
+    @Version
+    private Integer version;
+
     private CouponType(String name, Integer period, LocalDateTime deadline, CouponPolicy couponPolicy, Integer maxIssueCnt, CouponTargetType targetType, Long targetId) {
         this.name = name;
         this.period = period;

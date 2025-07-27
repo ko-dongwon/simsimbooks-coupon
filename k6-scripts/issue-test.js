@@ -3,11 +3,12 @@ import { check, sleep } from 'k6';
 import { Counter } from 'k6/metrics';
 
 export let options = {
-    vus: 200,
-    iterations: 200,
+    vus: 1000,
+    iterations: 1000,
 }
 const BASE_URL   = 'http://app:8080';
-const USER_COUNT = 200;
+const USER_COUNT = 1000;
+const MAX_ISSUE_COUNT = 100;
 
 export function setup(){
     const params = { headers: { 'Content-Type': 'application/json' } };
@@ -29,7 +30,7 @@ export function setup(){
         period: 30,
         deadline: null,
         couponPolicyId: policyRes.json().data.id,
-        maxIssueCnt: 30
+        maxIssueCnt: MAX_ISSUE_COUNT
     });
 
     let typeRes = http.post(`${BASE_URL}/coupon-types`,couponTypePayload,params);

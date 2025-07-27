@@ -23,7 +23,9 @@ public enum ErrorCode {
     COUPON_TYPE_DELETE_FAIL(HttpStatus.CONFLICT, "쿠폰 타입을 삭제할 수 없습니다."),
     USER_ALREADY_HAS_COUPON(HttpStatus.CONFLICT, "회원은 이미 쿠폰을 가지고 가지고 있습니다."),
     COUPON_POLICY_DELETE_FAIL(HttpStatus.CONFLICT, "쿠폰 정책을 삭제할 수 없습니다."),
-    COUPON_POLICY_NOT_FOUND(HttpStatus.NOT_FOUND, "쿠폰 정책을 찾을 수 없습니다.");
+    COUPON_POLICY_NOT_FOUND(HttpStatus.NOT_FOUND, "쿠폰 정책을 찾을 수 없습니다."),
+
+    SERVICE_BUSY(HttpStatus.SERVICE_UNAVAILABLE, "서버가 과부하 상태입니다. 잠시 후 다시 시도해 주세요.");
 
     private final HttpStatus status;
     private final String message;

@@ -7,6 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import simsimbooks.couponserver.common.exception.BusinessException;
 import simsimbooks.couponserver.common.exception.ErrorCode;
+import simsimbooks.couponserver.common.lock.DistributedLock;
+import simsimbooks.couponserver.common.lock.LockTarget;
 import simsimbooks.couponserver.domain.coupons.coupon.CouponStatus;
 import simsimbooks.couponserver.domain.coupons.coupon.dto.CouponResponse;
 import simsimbooks.couponserver.domain.coupons.coupon.dto.CouponSearchCondition;
@@ -45,6 +47,7 @@ public class CouponService {
     }
 
     @Transactional
+    @DistributedLock(target = LockTarget.COUPON_TYPE, key = "#couponTypeId")
     public CouponResponse issueCoupon(Long couponTypeId, Long userId) {
         CouponType couponType = couponTypeRepository.findById(couponTypeId).orElseThrow(CouponTypeNotFoundException::new);
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
