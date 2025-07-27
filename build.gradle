@@ -52,6 +52,10 @@ dependencies {
     // Redis (+Redisson)
     implementation 'org.springframework.boot:spring-boot-starter-data-redis'
     implementation 'org.redisson:redisson-spring-boot-starter:3.23.5'
+
+    //Prometheus
+    runtimeOnly 'io.micrometer:micrometer-registry-prometheus'
+
 }
 
 tasks.named('test') {

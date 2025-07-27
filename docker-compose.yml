@@ -1,0 +1,99 @@
+networks:
+  simsimbooks-coupon-networks:  # k6-network라는 도커 네트워크
+
+services:
+  k6:
+    image: grafana/k6
+    networks:
+      - simsimbooks-coupon-networks
+    volumes:
+      - ./k6-scripts:/scripts
+    environment:
+      - K6_WEB_DASHBOARD=true
+    ports:
+      - "5665:5665"
+    working_dir: /scripts
+
+  app:
+    build: .
+    container_name: app
+    ports:
+      - "8080:8080"
+    env_file:
+      - .env
+    environment:
+      DB_URL: ${DB_URL}
+      DB_USERNAME: ${DB_USERNAME}
+      DB_PASSWORD: ${DB_PASSWORD}
+      REDIS_HOST: ${REDIS_HOST}
+      REDIS_PORT: ${REDIS_PORT}
+    networks:
+      - simsimbooks-coupon-networks
+    healthcheck:
+      test: [ "CMD","curl","-f","http://localhost:8080/actuator/health" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+  db:
+    image: mysql:8.0.41
+    container_name: db
+    environment:
+      MYSQL_DATABASE: simsimbooks_coupon_DB
+      MYSQL_ROOT_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - simsimbooks-coupon-networks
+    healthcheck:
+      test: [ "CMD", "mysqladmin", "ping", "-h", "localhost", "-u", "root", "--password=${DB_PASSWORD}" ]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+  redis:
+    image: redis:7.0
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    networks:
+      - simsimbooks-coupon-networks
+
+  grafana:
+    image: grafana/grafana
+    container_name: grafana
+    ports:
+      - "3001:3000"
+    environment:
+      - GF_SECURITY_ADMIN_USER=admin
+      - GF_SECURITY_ADMIN_PASSWORD=admin
+    volumes:
+      - grafana_data:/var/lib/grafana
+    networks:
+      - simsimbooks-coupon-networks
+
+  prometheus:
+    image: prom/prometheus
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml
+    networks:
+      - simsimbooks-coupon-networks
+
+volumes:
+  mysql_data:
+  redis_data:
+  grafana_data:

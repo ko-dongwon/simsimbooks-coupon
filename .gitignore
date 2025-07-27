@@ -37,7 +37,8 @@ out/
 .vscode/
 
 
-*.yml
+application.yml
+application-test.yml
+
 .env
 *.sql
-**/src/test/java/simsimbooks/couponserver/data/
