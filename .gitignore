@@ -42,3 +42,4 @@ application-test.yml
 
 .env
 *.sql
+k6-scripts
