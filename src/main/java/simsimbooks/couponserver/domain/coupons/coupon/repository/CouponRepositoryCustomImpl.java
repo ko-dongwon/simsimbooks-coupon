@@ -31,8 +31,8 @@ public class CouponRepositoryCustomImpl implements CouponRepositoryCustom {
     @Override
     public Page<Coupon> searchByUserId(Long userId, CouponSearchCondition condition, Pageable pageable) {
         List<Coupon> content = queryFactory.selectFrom(coupon)
-                .leftJoin(coupon.couponType, couponType)
-                .leftJoin(couponType.couponPolicy, couponPolicy)
+                .leftJoin(coupon.couponType, couponType).fetchJoin()
+                .leftJoin(couponType.couponPolicy, couponPolicy).fetchJoin()
                 .where(
                         coupon.user.id.eq(userId),
                         statusEq(condition.getStatus()),
