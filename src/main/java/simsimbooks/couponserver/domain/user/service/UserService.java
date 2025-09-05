@@ -1,5 +1,8 @@
 package simsimbooks.couponserver.domain.user.service;
 
+import java.time.LocalDate;
+import java.util.List;
+
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -44,5 +47,9 @@ public class UserService {
     public void deleteUser(Long userId) {
         User user = userRepository.findById(userId).orElseThrow(UserNotFoundException::new);
         userRepository.delete(user);
+    }
+
+    public List<Long> getUserIdsByBirthdayMonth() {
+        return userRepository.findUserIdsByBirthdayMonth(LocalDate.now().getMonth().getValue());
     }
 }

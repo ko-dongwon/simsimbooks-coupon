@@ -5,8 +5,6 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.test.context.ActiveProfiles;
 
 import simsimbooks.couponserver.config.IntegrationTest;
 import simsimbooks.couponserver.domain.coupons.coupon.repository.CouponRepository;
@@ -31,7 +29,7 @@ import static org.assertj.core.api.AssertionsForClassTypes.assertThat;
 
 @Slf4j
 @IntegrationTest
-class CouponServiceTest {
+class CouponConcurrencyTest {
 
     @Autowired
     private UserRepository userRepository;
@@ -102,4 +100,6 @@ class CouponServiceTest {
         // 검증 2 : 발급 수는 최대 발급 수를 초과하면 안됨.
         assertThat(updatedCouponType.getCurrentIssueCnt()).isEqualTo(updatedCouponType.getMaxIssueCnt());
     }
+
+
 }

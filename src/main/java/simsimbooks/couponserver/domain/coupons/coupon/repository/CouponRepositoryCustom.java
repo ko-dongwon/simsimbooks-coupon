@@ -1,5 +1,7 @@
 package simsimbooks.couponserver.domain.coupons.coupon.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import simsimbooks.couponserver.domain.coupons.coupon.dto.CouponSearchCondition;
@@ -12,4 +14,5 @@ public interface CouponRepositoryCustom {
 
     void expireAllOverdueUnusedCoupon();
 
+    void bulkInsert(List<Coupon> coupons);
 }

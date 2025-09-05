@@ -7,11 +7,18 @@ import jakarta.persistence.EntityManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
+import org.springframework.jdbc.core.BatchPreparedStatementSetter;
+import org.springframework.jdbc.core.JdbcTemplate;
+
 import simsimbooks.couponserver.domain.coupons.coupon.CouponStatus;
 import simsimbooks.couponserver.domain.coupons.coupon.dto.CouponSearchCondition;
 import simsimbooks.couponserver.domain.coupons.coupon.entity.Coupon;
 import simsimbooks.couponserver.domain.coupons.coupontype.enums.CouponTargetType;
 
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.sql.Types;
 import java.time.LocalDateTime;
 import java.util.List;
 
@@ -22,11 +29,13 @@ import static simsimbooks.couponserver.domain.coupons.coupontype.entity.QCouponT
 public class CouponRepositoryCustomImpl implements CouponRepositoryCustom {
     private final EntityManager em;
     private final JPAQueryFactory queryFactory;
+    private final JdbcTemplate jdbcTemplate;
 
-    public CouponRepositoryCustomImpl(EntityManager em) {
+    public CouponRepositoryCustomImpl(EntityManager em, JdbcTemplate jdbcTemplate) {
         this.em = em;
         this.queryFactory = new JPAQueryFactory(em);
-    }
+		this.jdbcTemplate = jdbcTemplate;
+	}
 
     @Override
     public Page<Coupon> searchByUserId(Long userId, CouponSearchCondition condition, Pageable pageable) {
@@ -68,6 +77,7 @@ public class CouponRepositoryCustomImpl implements CouponRepositoryCustom {
 
     @Override
     public void expireAllOverdueUnusedCoupon() {
+        em.flush();
         em.createQuery("update Coupon c set c.status = :expired " +
                         "where c.status = :unused " +
                         "and c.deadline < :now")
@@ -76,10 +86,33 @@ public class CouponRepositoryCustomImpl implements CouponRepositoryCustom {
                 .setParameter("now", LocalDateTime.now())
                 .executeUpdate();
 
-        em.flush();
         em.clear();
     }
 
+    @Override
+    public void bulkInsert(List<Coupon> coupons) {
+        em.flush();
+        String sql = "INSERT INTO coupons (issued_at, used_at, deadline, status, coupon_type_id, user_id) VALUES (?, ?, ?, ?, ?, ?)";
+        jdbcTemplate.batchUpdate(sql, new BatchPreparedStatementSetter() {
+            @Override
+            public void setValues(PreparedStatement ps, int i) throws SQLException {
+                Coupon coupon = coupons.get(i);
+                ps.setTimestamp(1, Timestamp.valueOf(coupon.getIssuedAt()));
+                ps.setNull(2, Types.TIMESTAMP);
+                ps.setTimestamp(3,Timestamp.valueOf(coupon.getDeadline()));
+                ps.setString(4, coupon.getCouponType().getName());
+                ps.setLong(5, coupon.getCouponType().getId());
+                ps.setLong(6, coupon.getUser().getId());
+            }
+
+            @Override
+            public int getBatchSize() {
+                return coupons.size();
+            }
+        });
+
+        em.clear();
+    }
 
     private BooleanExpression statusEq(CouponStatus status) {
         return status == null ? null : coupon.status.eq(status);
