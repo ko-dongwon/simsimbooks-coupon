@@ -53,6 +53,8 @@
   <img width="1395" height="141" alt="image" src="https://github.com/user-attachments/assets/ec8bb9bf-8848-472f-8679-c533b2fb1dc9" />
 <br>
 
+---
+
 ### 2. 모니터링을 통한 N+1 문제 추적•해결
 블로그 글 : <a href="https://velog.io/@kodongwon/API%EB%B3%84-%EC%BF%BC%EB%A6%AC-%EB%AA%A8%EB%8B%88%ED%84%B0%EB%A7%81%EC%9D%84-%ED%86%B5%ED%95%9C-N1-%EB%AC%B8%EC%A0%9C-%ED%95%B4%EA%B2%B0%ED%95%98%EA%B8%B0">API별 쿼리 모니터링을 통한 N+1 문제 해결하기</a>
 #### 🔍 문제 원인
@@ -73,6 +75,7 @@
 - **API 단위 모니터링 구축** : 런타임 쿼리 현황 추적 가능
 <br>
 
+---
   
 ### 3. 생일 쿠폰 발급 성능 향상 (벌크 연산)
 블로그 글 : <a href="https://velog.io/@kodongwon/%EC%83%9D%EC%9D%BC-%EC%BF%A0%ED%8F%B0-1%EB%A7%8C-%EA%B1%B4-%EB%B0%9C%EA%B8%89-%EC%8B%9C-%EC%84%B1%EB%8A%A5-%EC%A0%80%ED%95%98-%EB%B2%8C%ED%81%AC%EC%97%B0%EC%82%B0%EC%9C%BC%EB%A1%9C-%EC%B5%9C%EC%A0%81%ED%99%94%ED%95%98%EA%B8%B0">쿠폰 대량 발급 시 성능 저하, 벌크연산으로 최적화하기</a>
